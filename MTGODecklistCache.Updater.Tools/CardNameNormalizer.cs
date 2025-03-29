@@ -78,13 +78,21 @@ namespace MTGODecklistCache.Updater.Tools
 
                     string target = createTargetName(front, back);
 
-                    if (!onlyCombinedNames) _normalization.Add(front, target);
-                    _normalization.Add($"{front}/{back}", target);
-                    _normalization.Add($"{front} / {back}", target);
-                    _normalization.Add($"{front}//{back}", target);
-                    _normalization.Add($"{front} // {back}", target);
-                    _normalization.Add($"{front}///{back}", target);
-                    _normalization.Add($"{front} /// {back}", target);
+                    if (_normalization.ContainsKey($"{front}/{back}")) 
+                    {
+                        // Error with scryfall database
+                        // Console.WriteLine("Duplicated card {0} // {1}", front, back);
+                    } 
+                    else
+                    {
+                        if (!onlyCombinedNames) _normalization.Add(front, target);
+                        _normalization.Add($"{front}/{back}", target);
+                        _normalization.Add($"{front} / {back}", target);
+                        _normalization.Add($"{front}//{back}", target);
+                        _normalization.Add($"{front} // {back}", target);
+                        _normalization.Add($"{front}///{back}", target);
+                        _normalization.Add($"{front} /// {back}", target);
+                    }
                 }
 
                 hasMore = data.has_more;
