@@ -148,19 +148,16 @@ namespace MTGODecklistCache.Updater.MtgMelee.Client
             HtmlDocument deckDoc = new HtmlDocument();
             deckDoc.LoadHtml(deckPageContent);
 
-            var copyButton = deckDoc.DocumentNode.SelectSingleNode("//button[@class='decklist-builder-copy-button btn-sm btn btn-card text-nowrap ']");
-            var cardList = WebUtility.HtmlDecode(copyButton.Attributes["data-clipboard-text"].Value).Split("\r\n", StringSplitOptions.RemoveEmptyEntries).ToArray();
+            HtmlNode decklist = deckDoc.DocumentNode.SelectSingleNode("//pre[@id='decklist-text' and @class='d-none']");
+            var cardList = decklist.InnerHtml.Split("\r\n", StringSplitOptions.RemoveEmptyEntries).ToArray();
 
             string playerUrl = deckDoc.DocumentNode.SelectSingleNode("//span[@class='decklist-card-title-author']/a")?.Attributes["href"]?.Value;
             string playerRaw = deckDoc.DocumentNode.SelectSingleNode("//span[@class='decklist-card-title-author']/a")?.InnerHtml;
 
             var playerName = GetPlayerName(playerRaw, playerUrl, players);
 
-            var formatDiv = deckDoc.DocumentNode.SelectSingleNode("//div[@class='card-header decklist-card-header']")
-                .SelectNodes("div").Skip(1).First()
-                .SelectNodes("div").Skip(2).First();
-
-            var format = formatDiv.InnerText.Trim();
+            HtmlNodeCollection detailsNodes = deckDoc.DocumentNode.SelectNodes("//div[contains(@class, 'decklist-details-row')]//span[contains(@class, 'text-nowrap')]");
+            var format = detailsNodes[2].InnerText.Trim();
 
             List<DeckItem> mainBoard = new List<DeckItem>();
             List<DeckItem> sideBoard = new List<DeckItem>();
@@ -169,7 +166,7 @@ namespace MTGODecklistCache.Updater.MtgMelee.Client
 
             foreach (var card in cardList)
             {
-                if (card == "Deck" || card == "Companion" || card == "Sideboard")
+                if (card == "Deck" || card == "Companion" || card == "Sideboard" || card == "" || card == "MainDeck")
                 {
                     if (card == "Companion")
                     {
