@@ -89,7 +89,7 @@ namespace MTGODecklistCache.Updater.MtgMelee
                 Tournament = new Model.Tournament(tournament),
                 Decks = decks.ToArray(),
                 Standings = standings.ToArray(),
-                Rounds = rounds.ToArray()
+                Rounds = rounds.Count() > 0? rounds.ToArray(): null
             };
         }
 
