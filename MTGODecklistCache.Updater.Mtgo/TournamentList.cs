@@ -54,7 +54,7 @@ namespace MTGODecklistCache.Updater.Mtgo
                         Date = parsedDate.Date,
                         Uri = uri,
                         JsonFile = Path.ChangeExtension(Path.GetFileName(uri.PathAndQuery), ".json"),
-                        ForceRedownload = title.Contains("league", StringComparison.InvariantCultureIgnoreCase) && ((DateTime.UtcNow.Date - parsedDate.Date).Days < _leagueRedownloadDays)
+                        ForceRedownload = false //title.Contains("league", StringComparison.InvariantCultureIgnoreCase) && ((DateTime.UtcNow.Date - parsedDate.Date).Days < _leagueRedownloadDays)
                     });
                 }
             }
